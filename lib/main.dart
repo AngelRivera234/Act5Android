@@ -4,38 +4,89 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static const String _title = 'Flutter Stateful Clicker Counter';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Application name
-      title: 'Flutter Hello World',
-      // Application theme data, you can set the colors for the application as
-      // you want
+      title: _title,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
-      // A widget which will be started on application startup
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});  
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   Widget build(BuildContext context) {
+    const List<Widget> _pages = <Widget>[
+      Icon(
+        Icons.call,
+        size: 150,
+      ),
+      Icon(
+        Icons.camera,
+        size: 150,
+      ),
+      Icon(
+        Icons.chat,
+        size: 150,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        // The title text which will be shown on the action bar
-        title: Text(title),
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: const Text('Flutter Demo Click Counter'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(color: Colors.white, size: 40),
+        selectedItemColor: Colors.white,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+
+        iconSize: 40,
+        elevation: 0,
+        backgroundColor: Colors.green,
+        mouseCursor: SystemMouseCursors.grab,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.call),
+            label: 'Llamar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'Camara',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Charlar',
+          ),
+        ],
+
+        currentIndex: _selectedIndex, //New
+        onTap: _onItemTapped, //New
       ),
       body: Center(
-        child: Text(
-          'Hello, World!',
-        ),
+        child: _pages.elementAt(_selectedIndex), //New
       ),
     );
   }
